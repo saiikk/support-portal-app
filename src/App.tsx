@@ -1,122 +1,72 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
-
+import { usePage } from "./hooks/usePage";
+import { InquiryListPage } from "./components/InquiryListPage";
+import { useInquiry } from "./hooks/useInquiry";
+import InquiryDetailPage from "./components/InquiryDetailPage";
+import type { Inquiry, InquiryCreateInput } from "./types/Inquiry";
+import { InquiryCreatePage } from "./components/InquiryCreatePage";
+import type { InquiryStatusUpdateInput } from "./types/Inquiry";
 function App() {
-  const [count, setCount] = useState(0)
+  const { inquiries, setInquiries } = useInquiry();
+
+  const {
+    currentPage,
+    setCurrentPage,
+    selectedId,
+    handleSelectInquiry,
+    handleBack,
+  } = usePage();
+
+  const handleAdd = (input: InquiryCreateInput) => {
+    const newInquiry: Inquiry = {
+      id: Date.now(),
+      ...input,
+      status: "pending",
+      created_at: new Date().toISOString(),
+    };
+    setInquiries([...inquiries, newInquiry]);
+    setCurrentPage("list");
+  };
+
+  const updateInquiryStatus = (id: number, input: InquiryStatusUpdateInput) => {
+    setInquiries((prev) =>
+      prev.map((inquiry) =>
+        inquiry.id === id
+          ? {
+              ...inquiry,
+              status: input.status,
+            }
+          : inquiry,
+      ),
+    );
+  };
 
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      <nav>
+        {currentPage === "detail" ? (
+          <button onClick={handleBack}>戻る</button>
+        ) : (
+          <div>
+            <button onClick={() => setCurrentPage("list")}>一覧</button>
+            <button onClick={() => setCurrentPage("create")}>新規登録</button>
+          </div>
+        )}
+      </nav>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+      <main>
+        {currentPage === "list" && (
+          <InquiryListPage
+            inquiries={inquiries}
+            onSelectInquiry={handleSelectInquiry}
+          />
+        )}
+        {currentPage === "detail" && selectedId !== null && (
+          <InquiryDetailPage inquiries={inquiries} selectedId={selectedId} updateInquiryStatus={updateInquiryStatus} />
+        )}
+        {currentPage === "create" && <InquiryCreatePage onAdd={handleAdd} />}
+      </main>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

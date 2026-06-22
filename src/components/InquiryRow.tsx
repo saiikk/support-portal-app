@@ -1,4 +1,5 @@
 import type { Inquiry } from "../types/Inquiry";
+import { formatDate } from "../utils/formatDate";
 import { StatusBadge } from "./StatusBadge";
 
 type InquiryRowProps = {
@@ -19,7 +20,7 @@ export const InquiryRow = ({ inquiry, onSelect }: InquiryRowProps) => {
         <StatusBadge status={inquiry.status} />
       </td>
       <td>{inquiry.requester}</td>
-      <td>{inquiry.created_at}</td>
+      <td>{formatDate(inquiry.created_at)}</td>
     </tr>
   );
 };

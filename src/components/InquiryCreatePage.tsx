@@ -9,11 +9,19 @@ export const InquiryCreatePage = ({ onAdd }: InquiryCreatePageProps) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [requester, setRequester] = useState("");
+  const [errMsg, setErrMsg] = useState("");
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (title.trim() === "" || content.trim() === "" || requester.trim() === "")
+    if (
+      title.trim() === "" ||
+      content.trim() === "" ||
+      requester.trim() === ""
+    ) {
+      setErrMsg("空のフォームがあります。");
       return;
+    }
+    setErrMsg("");
     onAdd({ title, content, requester });
   };
 
@@ -45,7 +53,10 @@ export const InquiryCreatePage = ({ onAdd }: InquiryCreatePageProps) => {
             onChange={(e) => setRequester(e.target.value)}
           />
         </div>
-        <button type="submit">登録する</button>
+        <button type="submit" disabled={title.trim() === ""}>
+          登録する
+        </button>
+        <p style={{ color: "red" }}>{errMsg}</p>
       </form>
     </div>
   );

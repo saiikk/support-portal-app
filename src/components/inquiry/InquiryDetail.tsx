@@ -7,6 +7,7 @@ type Props = {
   onBack: () => void;
 };
 import { formatDate } from "../../utils/formatDate";
+import { inquiryStatusColor } from "../../utils/inquiryStatusColor";
 
 function InquiryDetail({
   inquiries,
@@ -63,7 +64,7 @@ function InquiryDetail({
           style={{
             display: "inline-block",
             padding: "4px 12px",
-            backgroundColor: "#e3f2fd",
+            backgroundColor: inquiryStatusColor[inquiry.status],
             borderRadius: "16px",
           }}
           value={inquiry.status}

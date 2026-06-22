@@ -8,7 +8,7 @@ type Props = {
 
 function PageNavigation({ currentPage, onBack, setCurrentPage }: Props) {
   return (
-    <nav>
+    <nav style={{ width: "200px" }}>
       {currentPage === "list" ? (
         <button onClick={() => setCurrentPage("create")}>新規登録</button>
       ) : (

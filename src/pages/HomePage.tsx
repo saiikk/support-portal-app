@@ -38,7 +38,9 @@ function HomePage() {
           setCurrentPage={setCurrentPage}
           onBack={handleBack}
         />
-        <InquirySort sortOrder={sortOrder} setSortOrder={setSortOrder} />
+        {currentPage === "list" && (
+          <InquirySort sortOrder={sortOrder} setSortOrder={setSortOrder} />
+        )}
       </div>
       <main>
         {currentPage === "list" && (

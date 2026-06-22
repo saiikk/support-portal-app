@@ -6,6 +6,7 @@ import { InquiryCreate } from "../components/inquiry/InquiryCreate";
 import type { InquiryCreateInput } from "../types/Inquiry";
 import PageNavigation from "../components/navigation/PageNavigation.tsx";
 import InquirySort from "../components/inquiry/InquirySort.tsx";
+import logo from "../assets/img_coreTama_profile.svg";
 
 function HomePage() {
   const {
@@ -31,7 +32,14 @@ function HomePage() {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        backgroundImage: `url(${logo})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "auto",
+        backgroundPosition: "absolute"
+      }}
+    >
       <div style={{ display: "flex", margin: "0 auto", width: "800px" }}>
         <PageNavigation
           currentPage={currentPage}

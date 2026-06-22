@@ -1,11 +1,11 @@
-import type { InquiryCreateInput } from "../types/Inquiry";
+import type { InquiryCreateInput } from "../../types/Inquiry";
 import { useState } from "react";
 
-type InquiryCreatePageProps = {
+type InquiryCreateProps = {
   onAdd: (input: InquiryCreateInput) => void;
 };
 
-export const InquiryCreatePage = ({ onAdd }: InquiryCreatePageProps) => {
+export const InquiryCreate = ({ onAdd }: InquiryCreateProps) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [requester, setRequester] = useState("");

@@ -1,11 +1,11 @@
-import type { FilterValue } from "../types/Filter";
+import type { FilterValue } from "../../types/Filter";
 
 type Props = {
     filter: FilterValue;
     setFilter: (value: FilterValue) => void;
 }
 
-function InquiryFilterButton({ filter, setFilter }: Props) {
+function InquiryFilter({ filter, setFilter }: Props) {
     return (
         <div>
         <button onClick={() => setFilter("all")} disabled={filter === "all"}>
@@ -36,4 +36,4 @@ function InquiryFilterButton({ filter, setFilter }: Props) {
     )
 }
 
-export default InquiryFilterButton
+export default InquiryFilter

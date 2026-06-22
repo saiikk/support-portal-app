@@ -1,14 +1,14 @@
-import { inquiryStatusLabel, type Inquiry } from "../types/Inquiry";
-import type { InquiryStatusUpdateInput, InquiryStatus } from "../types/Inquiry";
+import { inquiryStatusLabel, type Inquiry } from "../../types/Inquiry";
+import type { InquiryStatusUpdateInput, InquiryStatus } from "../../types/Inquiry";
 type Props = {
   inquiries: Inquiry[];
   selectedId: number | null;
   updateInquiryStatus: (id: number, input: InquiryStatusUpdateInput) => void;
   onBack: () => void;
 };
-import { formatDate } from "../utils/formatDate";
+import { formatDate } from "../../utils/formatDate";
 
-function InquiryDetailPage({
+function InquiryDetail({
   inquiries,
   selectedId,
   updateInquiryStatus,
@@ -92,4 +92,4 @@ function InquiryDetailPage({
   );
 }
 
-export default InquiryDetailPage;
+export default InquiryDetail;

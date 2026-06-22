@@ -1,10 +1,10 @@
 import { usePage } from "../hooks/usePage";
 import { useInquiry } from "../hooks/useInquiry";
-import { InquiryListPage } from "../components/InquiryListPage";
-import InquiryDetailPage from "../components/InquiryDetailPage";
-import { InquiryCreatePage } from "../components/InquiryCreatePage";
+import { InquiryList } from "../components/inquiry/InquiryList";
+import InquiryDetail from "../components/inquiry/InquiryDetail";
+import { InquiryCreate } from "../components/inquiry/InquiryCreate";
 import type { InquiryCreateInput } from "../types/Inquiry";
-import ButtonList from "../components/ButtonList";
+import PageNavigation from "../components/navigation/PageNavigation.tsx";
 
 function HomePage() {
   const { inquiries, addInquiry, updateInquiryStatus } = useInquiry();
@@ -24,7 +24,7 @@ function HomePage() {
 
   return (
     <>
-      <ButtonList
+      <PageNavigation
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         onBack={handleBack}
@@ -32,20 +32,20 @@ function HomePage() {
 
       <main>
         {currentPage === "list" && (
-          <InquiryListPage
+          <InquiryList
             inquiries={inquiries}
             onSelectInquiry={handleSelectInquiry}
           />
         )}
         {currentPage === "detail" && selectedId !== null && (
-          <InquiryDetailPage
+          <InquiryDetail
             inquiries={inquiries}
             selectedId={selectedId}
             updateInquiryStatus={updateInquiryStatus}
             onBack={handleBack}
           />
         )}
-        {currentPage === "create" && <InquiryCreatePage onAdd={handleAdd} />}
+        {currentPage === "create" && <InquiryCreate onAdd={handleAdd} />}
       </main>
     </>
   );

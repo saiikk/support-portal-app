@@ -1,74 +1,117 @@
-# React + TypeScript + Vite
+# Support Portal App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + TypeScript で作成した問い合わせ管理アプリです。
 
-Currently, two official plugins are available:
+## 概要
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+問い合わせの一覧表示・詳細確認・新規登録・ステータス更新を行うことができます。
 
-## React Compiler
+## 機能
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 問い合わせ一覧
 
-## Expanding the ESLint configuration
+- 問い合わせ一覧の表示
+- 作成日時による並び替え
+  - 新しい順
+  - 古い順
+- ステータスの表示
+  - 未対応
+  - 対応中
+  - 完了
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 問い合わせ詳細
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- 問い合わせ内容の確認
+- ステータス変更
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 問い合わせ登録
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- タイトル入力
+- 内容入力
+- 投稿者名入力
+- 必須項目のバリデーション
+
+## 技術スタック
+
+- React
+- TypeScript
+- React Hooks
+  - useState
+  - useMemo
+
+## ディレクトリ構成
+
+```text
+src/
+├── components/
+│   ├── inquiry/
+│   └── navigation/
+├── hooks/
+├── pages/
+├── types/
+└── utils/
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 状態管理
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+カスタムフックを利用して状態管理を行っています。
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### useInquiry
+
+問い合わせデータの管理
+
+- 一覧取得
+- 新規登録
+- ステータス更新
+- 並び替え
+
+### usePage
+
+画面遷移の管理
+
+- 一覧画面
+- 詳細画面
+- 新規作成画面
+
+## データモデル
+
+```ts
+export type Inquiry = {
+  id: number;
+  title: string;
+  content: string;
+  requester: string;
+  status: InquiryStatus;
+  created_at: string;
+};
 ```
-# support-portal-app
+
+```ts
+export type InquiryStatus =
+  | "pending"
+  | "in_progress"
+  | "completed";
+```
+
+## 起動方法
+
+### インストール
+
+```bash
+npm install
+```
+
+### 開発サーバー起動
+
+```bash
+npm run dev
+```
+
+## 今後の改善案
+
+- React Hook Form の導入
+- Zod によるバリデーション
+- LocalStorage 永続化
+- API 連携
+- ページネーション
+- 検索機能

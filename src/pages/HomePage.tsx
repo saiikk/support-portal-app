@@ -8,7 +8,14 @@ import PageNavigation from "../components/navigation/PageNavigation.tsx";
 import InquirySort from "../components/inquiry/InquirySort.tsx";
 
 function HomePage() {
-  const { inquiries, addInquiry, updateInquiryStatus } = useInquiry();
+  const {
+    inquiries,
+    addInquiry,
+    updateInquiryStatus,
+    sortOrder,
+    setSortOrder,
+    sortedInquiries,
+  } = useInquiry();
 
   const {
     currentPage,
@@ -24,19 +31,19 @@ function HomePage() {
   };
 
   return (
-    <>
-      <PageNavigation
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        onBack={handleBack}
-      />
-
-      <InquirySort />
-
+    <div>
+      <div style={{ display: "flex", margin: "0 auto", width: "800px" }}>
+        <PageNavigation
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          onBack={handleBack}
+        />
+        <InquirySort sortOrder={sortOrder} setSortOrder={setSortOrder} />
+      </div>
       <main>
         {currentPage === "list" && (
           <InquiryList
-            inquiries={inquiries}
+            inquiries={sortedInquiries}
             onSelectInquiry={handleSelectInquiry}
             onUpdate={updateInquiryStatus}
           />
@@ -51,7 +58,7 @@ function HomePage() {
         )}
         {currentPage === "create" && <InquiryCreate onAdd={handleAdd} />}
       </main>
-    </>
+    </div>
   );
 }
 

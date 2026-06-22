@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Inquiry } from "../../types/Inquiry";
+import type { Inquiry, InquiryStatusUpdateInput } from "../../types/Inquiry";
 import type { FilterValue } from "../../types/Filter";
 import { InquiryTable } from "./InquiryTable";
 import InquiryFilter from "./InquiryFilter";
@@ -7,11 +7,13 @@ import InquiryFilter from "./InquiryFilter";
 type InquiryListProps = {
   inquiries: Inquiry[];
   onSelectInquiry: (id: number) => void;
+  onUpdate: (id: number, input: InquiryStatusUpdateInput) => void
 };
 
 export const InquiryList = ({
   inquiries,
   onSelectInquiry,
+  onUpdate
 }: InquiryListProps) => {
 
   const [filter, setFilter] = useState<FilterValue>("all");
@@ -30,6 +32,7 @@ export const InquiryList = ({
         <InquiryTable
           inquiries={filteredInquiries}
           onSelect={onSelectInquiry}
+          onUpdate={onUpdate}
         />
       )}
     </div>

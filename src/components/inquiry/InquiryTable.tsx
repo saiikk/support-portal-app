@@ -1,14 +1,15 @@
-import type { Inquiry } from "../../types/Inquiry";
+import type { Inquiry, InquiryStatusUpdateInput } from "../../types/Inquiry";
 import { InquiryRow } from "./InquiryRow";
 
 type InquiryTableProps = {
   inquiries: Inquiry[];
   onSelect: (id: number) => void;
+  onUpdate: (id: number, status: InquiryStatusUpdateInput) => void
 };
 
-export const InquiryTable = ({ inquiries, onSelect }: InquiryTableProps) => {
+export const InquiryTable = ({ inquiries, onSelect, onUpdate }: InquiryTableProps) => {
   return (
-    <table>
+    <table style={{ margin: "0 auto" }}>
       <thead>
         <tr>
           <th>ID</th>
@@ -20,7 +21,7 @@ export const InquiryTable = ({ inquiries, onSelect }: InquiryTableProps) => {
       </thead>
       <tbody>
         {inquiries.map((inquiry) => (
-          <InquiryRow key={inquiry.id} inquiry={inquiry} onSelect={onSelect} />
+          <InquiryRow key={inquiry.id} inquiry={inquiry} onSelect={onSelect} onUpdate={onUpdate} />
         ))}
       </tbody>
     </table>

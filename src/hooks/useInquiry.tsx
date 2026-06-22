@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Inquiry } from "../types/Inquiry";
+import type { Inquiry, InquiryCreateInput,InquiryStatusUpdateInput } from "../types/Inquiry";
 
 export function useInquiry() {
   const INITIAL_INQUIRIES: Inquiry[] = [
@@ -31,8 +31,33 @@ export function useInquiry() {
 
   const [inquiries, setInquiries] = useState<Inquiry[]>(INITIAL_INQUIRIES);
 
+  const addInquiry = (input: InquiryCreateInput) => {
+    const newInquiry: Inquiry = {
+      id: Date.now(),
+      ...input,
+      status: "pending",
+      created_at: new Date().toISOString(),
+    };
+    setInquiries([...inquiries, newInquiry]);
+  };
+
+  const updateInquiryStatus = (id: number, input: InquiryStatusUpdateInput) => {
+    setInquiries((prev) =>
+      prev.map((inquiry) =>
+        inquiry.id === id
+          ? {
+              ...inquiry,
+              status: input.status,
+            }
+          : inquiry,
+      ),
+    );
+  };
+
   return {
     inquiries,
-    setInquiries
+    setInquiries,
+    addInquiry,
+    updateInquiryStatus,
   };
 }

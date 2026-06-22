@@ -1,12 +1,19 @@
-import { inquiryStatusLabel, type Inquiry } from "../types/Inquiry";
-import type { InquiryStatusUpdateInput,InquiryStatus } from "../types/Inquiry";
+import { inquiryStatusLabel, type Inquiry } from "../../types/Inquiry";
+import type { InquiryStatusUpdateInput, InquiryStatus } from "../../types/Inquiry";
 type Props = {
   inquiries: Inquiry[];
   selectedId: number | null;
   updateInquiryStatus: (id: number, input: InquiryStatusUpdateInput) => void;
+  onBack: () => void;
 };
+import { formatDate } from "../../utils/formatDate";
 
-function InquiryDetailPage({ inquiries, selectedId, updateInquiryStatus }: Props) {
+function InquiryDetail({
+  inquiries,
+  selectedId,
+  updateInquiryStatus,
+  onBack,
+}: Props) {
   const inquiry = inquiries.find((i) => i.id === selectedId);
   if (!inquiry) {
     return <p>問い合わせが見つかりません</p>;
@@ -60,11 +67,12 @@ function InquiryDetailPage({ inquiries, selectedId, updateInquiryStatus }: Props
             borderRadius: "16px",
           }}
           value={inquiry.status}
-          onChange={(e) =>
+          onChange={(e) => {
             updateInquiryStatus(inquiry.id, {
               status: e.target.value as InquiryStatus,
-            })
-          }
+            });
+            onBack();
+          }}
         >
           {Object.entries(inquiryStatusLabel).map(([value, label]) => (
             <option key={value} value={value}>
@@ -78,10 +86,10 @@ function InquiryDetailPage({ inquiries, selectedId, updateInquiryStatus }: Props
         <h2 style={{ color: "#666", fontSize: "14px", marginBottom: "4px" }}>
           送信日付
         </h2>
-        <p>{inquiry.created_at}</p>
+        <p>{formatDate(inquiry.created_at)}</p>
       </div>
     </div>
   );
 }
 
-export default InquiryDetailPage;
+export default InquiryDetail;

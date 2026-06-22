@@ -1,4 +1,4 @@
-import type { Inquiry } from "../types/Inquiry";
+import type { Inquiry } from "../../types/Inquiry";
 import { InquiryRow } from "./InquiryRow";
 
 type InquiryTableProps = {

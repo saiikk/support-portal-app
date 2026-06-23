@@ -18,5 +18,4 @@ function PageNavigation({ currentPage, onBack, setCurrentPage }: Props) {
   );
 }
 
-
 export default PageNavigation;

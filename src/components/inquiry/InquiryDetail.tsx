@@ -3,15 +3,16 @@ import type {
   InquiryStatusUpdateInput,
   InquiryStatus,
 } from "../../types/Inquiry";
+import { formatDate } from "../../utils/formatDate";
+import { inquiryStatusColor } from "../../utils/inquiryStatusColor";
+import { InquiryDetailRow } from "./InquiryDetailRow";
+
 type Props = {
   inquiries: Inquiry[];
   selectedId: number | null;
   updateInquiryStatus: (id: number, input: InquiryStatusUpdateInput) => void;
   onBack: () => void;
 };
-import { formatDate } from "../../utils/formatDate";
-import { inquiryStatusColor } from "../../utils/inquiryStatusColor";
-import { InquiryDetailRow } from "./InquiryDetailRow";
 
 function InquiryDetail({
   inquiries,

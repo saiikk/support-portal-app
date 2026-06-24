@@ -1,4 +1,6 @@
-import { useState,useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { inquiryApi } from "../api/inquiries";
+
 import type {
   Inquiry,
   InquiryCreateInput,
@@ -91,6 +93,14 @@ export function useInquiry() {
 
   const [inquiries, setInquiries] = useState<Inquiry[]>(INITIAL_INQUIRIES);
 
+  useEffect(() => {
+    inquiryApi.getAll().then((data) => {
+      if (data.length > 0) {
+        setInquiries(data);
+      }
+    });
+  }, []);
+
   const addInquiry = (input: InquiryCreateInput) => {
     const newInquiry: Inquiry = {
       id: Date.now(),
@@ -101,16 +111,14 @@ export function useInquiry() {
     setInquiries([...inquiries, newInquiry]);
   };
 
-  const updateInquiryStatus = (id: number, input: InquiryStatusUpdateInput) => {
+  const updateInquiryStatus = async (
+    id: number,
+    status: InquiryStatusUpdateInput,
+  ) => {
+    const updatedInquiry = await inquiryApi.updateStatus(id, status);
+
     setInquiries((prev) =>
-      prev.map((inquiry) =>
-        inquiry.id === id
-          ? {
-              ...inquiry,
-              status: input.status,
-            }
-          : inquiry,
-      ),
+      prev.map((inquiry) => (inquiry.id === id ? updatedInquiry : inquiry)),
     );
   };
 

@@ -4,24 +4,34 @@ import { InquiryRow } from "./InquiryRow";
 type InquiryTableProps = {
   inquiries: Inquiry[];
   onSelect: (id: number) => void;
-  onUpdate: (id: number, status: InquiryStatusUpdateInput) => void
+  onUpdate: (id: number, status: InquiryStatusUpdateInput) => void;
 };
 
-export const InquiryTable = ({ inquiries, onSelect, onUpdate }: InquiryTableProps) => {
+export const InquiryTable = ({
+  inquiries,
+  onSelect,
+  onUpdate,
+}: InquiryTableProps) => {
   return (
-    <table style={{ margin: "0 auto" }}>
-      <thead>
+    <table className="mx-auto w-full max-w-5xl border border-gray-200 rounded-md overflow-hidden">
+      <thead className="bg-gray-100 text-gray-700 text-sm">
         <tr>
-          <th>ID</th>
-          <th>タイトル</th>
-          <th>ステータス</th>
-          <th>投稿者</th>
-          <th>日時</th>
+          <th className="px-4 py-3 text-left font-semibold">ID</th>
+          <th className="px-4 py-3 text-left font-semibold">タイトル</th>
+          <th className="px-4 py-3 text-left font-semibold">ステータス</th>
+          <th className="px-4 py-3 text-left font-semibold">投稿者</th>
+          <th className="px-4 py-3 text-left font-semibold">日時</th>
         </tr>
       </thead>
-      <tbody>
+
+      <tbody className="divide-y divide-gray-100 text-sm text-gray-700">
         {inquiries.map((inquiry) => (
-          <InquiryRow key={inquiry.id} inquiry={inquiry} onSelect={onSelect} onUpdate={onUpdate} />
+          <InquiryRow
+            key={inquiry.id}
+            inquiry={inquiry}
+            onSelect={onSelect}
+            onUpdate={onUpdate}
+          />
         ))}
       </tbody>
     </table>

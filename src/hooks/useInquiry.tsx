@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState } from "react";
 import { inquiryApi } from "../api/inquiries";
 
 import type {
@@ -91,15 +91,7 @@ export function useInquiry() {
     },
   ];
 
-  const [inquiries, setInquiries] = useState<Inquiry[]>(INITIAL_INQUIRIES);
-
-  useEffect(() => {
-    inquiryApi.getAll().then((data) => {
-      if (data.length > 0) {
-        setInquiries(data);
-      }
-    });
-  }, []);
+  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
 
   const addInquiry = (input: InquiryCreateInput) => {
     const newInquiry: Inquiry = {
@@ -122,24 +114,11 @@ export function useInquiry() {
     );
   };
 
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-
-  const sortedInquiries = useMemo(() => {
-    return [...inquiries].sort((a, b) => {
-      const diff =
-        new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
-
-      return sortOrder === "asc" ? diff : -diff;
-    });
-  }, [inquiries, sortOrder]);
 
   return {
     inquiries,
     setInquiries,
     addInquiry,
     updateInquiryStatus,
-    sortOrder,
-    setSortOrder,
-    sortedInquiries,
   };
 }

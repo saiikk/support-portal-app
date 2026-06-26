@@ -2,7 +2,6 @@ function Footer() {
     return (
         <p style={{
             width: "100%",
-            marginTop: "24px",
             lineHeight: "48px",
             background: "#fdc539",
             textAlign: "center",

@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { inquiryApi } from "../api/inquiries";
 
 import type {
@@ -114,24 +114,11 @@ export function useInquiry() {
     );
   };
 
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-
-  const sortedInquiries = useMemo(() => {
-    return [...inquiries].sort((a, b) => {
-      const diff =
-        new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
-
-      return sortOrder === "asc" ? diff : -diff;
-    });
-  }, [inquiries, sortOrder]);
 
   return {
     inquiries,
     setInquiries,
     addInquiry,
     updateInquiryStatus,
-    sortOrder,
-    setSortOrder,
-    sortedInquiries,
   };
 }

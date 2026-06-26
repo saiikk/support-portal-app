@@ -8,19 +8,15 @@ import PageNavigation from "../components/navigation/PageNavigation.tsx";
 import InquirySort from "../components/inquiry/InquirySort.tsx";
 import { useAuth } from "../hooks/useAuth.tsx";
 import { LoginForm } from "../components/auth/LoginForm.tsx";
-import { useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { inquiryApi } from "../api/inquiries";
+import { Pagination } from "../components/navigation/Pagination.tsx";
+import type { FilterValue } from "../types/Filter.tsx";
+import InquiryFilter from "../components/inquiry/InquiryFilter.tsx";
 
 function HomePage() {
-  const {
-    inquiries,
-    setInquiries,
-    addInquiry,
-    updateInquiryStatus,
-    sortOrder,
-    setSortOrder,
-    sortedInquiries,
-  } = useInquiry();
+  const { inquiries, setInquiries, addInquiry, updateInquiryStatus } =
+    useInquiry();
 
   const {
     currentPage,
@@ -31,6 +27,44 @@ function HomePage() {
   } = usePage();
 
   const { isLoggedIn, isLoading, login, logout } = useAuth();
+
+  //inquiryのフィルタリング
+  const [filter, setFilter] = useState<FilterValue>("all");
+  // sort
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  //ページネーション
+  const ITEMS_PER_PAGE = 10;
+  const [currentPagenation, setCurrentPagenation] = useState(1);
+
+  const filteredInquiries = useMemo(() => {
+    return filter === "all"
+      ? inquiries
+      : inquiries.filter((i) => i.status === filter);
+  }, [inquiries, filter]);
+
+  const sortedInquiries = useMemo(() => {
+    return [...filteredInquiries].sort((a, b) => {
+      const diff =
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+
+      return sortOrder === "asc" ? diff : -diff;
+    });
+  }, [filteredInquiries, sortOrder]);
+
+  const paginatedInquiries = useMemo(() => {
+    const start = (currentPagenation - 1) * ITEMS_PER_PAGE;
+    return sortedInquiries.slice(start, start + ITEMS_PER_PAGE);
+  }, [sortedInquiries, currentPagenation]);
+
+  const handleFilterChange = (value: FilterValue) => {
+    setFilter(value);
+    setCurrentPagenation(1);
+  };
+
+  const handleSortChange = (value: "asc" | "desc") => {
+    setSortOrder(value);
+    setCurrentPagenation(1);
+  };
 
   useEffect(() => {
     if (!isLoggedIn) return;
@@ -74,7 +108,7 @@ function HomePage() {
           />
 
           {currentPage === "list" && (
-            <InquirySort sortOrder={sortOrder} setSortOrder={setSortOrder} />
+            <InquirySort sortOrder={sortOrder} setSortOrder={handleSortChange} />
           )}
         </div>
       </div>
@@ -83,11 +117,14 @@ function HomePage() {
       <main className="flex-1 flex justify-center">
         <div className="w-full">
           {currentPage === "list" && (
-            <InquiryList
-              inquiries={sortedInquiries}
-              onSelectInquiry={handleSelectInquiry}
-              onUpdate={updateInquiryStatus}
-            />
+            <div>
+              <InquiryFilter filter={filter} setFilter={handleFilterChange} />
+              <InquiryList
+                inquiries={paginatedInquiries}
+                onSelectInquiry={handleSelectInquiry}
+                onUpdate={updateInquiryStatus}
+              />
+            </div>
           )}
 
           {currentPage === "detail" && selectedId !== null && (
@@ -102,6 +139,14 @@ function HomePage() {
           {currentPage === "create" && <InquiryCreate onAdd={handleAdd} />}
         </div>
       </main>
+      <footer className="mb-8">
+        <Pagination
+          currentPage={currentPagenation}
+          setCurrentPage={setCurrentPagenation}
+          totalItems={sortedInquiries.length}
+          itemsPerPage={ITEMS_PER_PAGE}
+        />
+      </footer>
     </div>
   );
 }

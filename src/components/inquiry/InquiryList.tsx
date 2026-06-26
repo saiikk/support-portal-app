@@ -21,7 +21,7 @@ export const InquiryList = ({
     filter === "all" ? inquiries : inquiries.filter((i) => i.status === filter);
 
   return (
-    <div>
+    <div className="flex flex-col items-center">
       <h2>お問い合わせ件数（{filteredInquiries.length} 件）</h2>
 
      <InquiryFilter filter={filter} setFilter={setFilter}/>

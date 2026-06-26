@@ -1,29 +1,21 @@
 function Header() {
   return (
-    <div style={{ display: "flex" }}>
-      <h1
-        style={{
-          width: "100%",
-          height: "80px",
-          background: "#fdc539",
-          textAlign: "left",
-        }}
-      >
-        CORE TECH
-      </h1>
+    <div className="w-full h-20 bg-[#fdc539]">
+      <h1 className="flex items-end">
+        <span className="text-gray-500 text-3xl leading-none">F</span>
 
-      <button
-        style={{
-          width: "100px",
-          margin: "auto",
-          height: "80px",
-          background: "#fdc539",
-          textAlign: "left",
-          border: "none",
-        }}
-      >
-        ログアウト
-      </button>
+        <span className="text-gray-500 text-xl px-1 leading-none">R</span>
+        <span className="text-gray-500 text-xl px-1 leading-none">E</span>
+        <span className="text-gray-500 text-xl px-1 leading-none">S</span>
+        <span className="text-gray-500 text-xl px-1 leading-none">H</span>
+        <span className="px-2"></span>
+
+        <span className="text-gray-500 text-3xl leading-none">T</span>
+
+        <span className="text-gray-500 text-xl px-1 leading-none">E</span>
+        <span className="text-gray-500 text-xl px-1 leading-none">C</span>
+        <span className="text-gray-500 text-xl px-1 leading-none">H</span>
+      </h1>
     </div>
   );
 }

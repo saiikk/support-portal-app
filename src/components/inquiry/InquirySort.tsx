@@ -6,8 +6,8 @@ type Props = {
 function InquirySort({ sortOrder, setSortOrder }: Props) {
   return (
     <button
+      className="ml-auto px-4 py-1.5 text-sm font-medium border border-gray-300 rounded-xs text-gray-700 hover:bg-gray-100 active:bg-gray-200 transition"
       onClick={() => setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"))}
-      style={{ marginLeft: "auto" }}
     >
       {sortOrder === "asc" ? "新しい順" : "古い順"}
     </button>

@@ -1,28 +1,42 @@
 import type { InquiryCreateInput } from "../../types/Inquiry";
-import { useState } from "react";
 import { FormField } from "./InquiryFormField";
+import axios from "axios";
+import { inquiryApi } from "../../api/inquiries";
+import { useForm } from "react-hook-form";
+
+type LaravelValidationError = {
+  message: string;
+  errors: Record<string, string[]>;
+};
 
 type InquiryCreateProps = {
   onAdd: (input: InquiryCreateInput) => void;
 };
 
 export const InquiryCreate = ({ onAdd }: InquiryCreateProps) => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [requester, setRequester] = useState("");
-  const [errMsg, setErrMsg] = useState("");
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm<InquiryCreateInput>();
 
-  const isDisabled =
-    title.trim() === "" || content.trim() === "" || requester.trim() === "";
-
-  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (isDisabled) {
-      setErrMsg("空のフォームがあります。");
-      return;
+  const onSubmit = async (data: InquiryCreateInput) => {
+    try {
+      const inquiry = await inquiryApi.create(data);
+      onAdd(inquiry);
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.response?.status === 422) {
+        const body = e.response.data as LaravelValidationError;
+        // Laravel の 422 バリデーションエラーをフィールドに紐付ける
+        Object.entries(body.errors).forEach(([field, messages]) => {
+          setError(field as keyof InquiryCreateInput, {
+            type: "server",
+            message: messages[0],
+          });
+        });
+      }
     }
-    setErrMsg("");
-    onAdd({ title, content, requester });
   };
 
   return (
@@ -36,7 +50,7 @@ export const InquiryCreate = ({ onAdd }: InquiryCreateProps) => {
       <h1>新規問い合わせ</h1>
 
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         style={{
           padding: "24px",
           textAlign: "left",
@@ -48,52 +62,28 @@ export const InquiryCreate = ({ onAdd }: InquiryCreateProps) => {
         }}
       >
         <FormField label="タイトル" required>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            style={{ lineHeight: "24px" }}
-          />
+          <input {...register("title")} style={{ lineHeight: "24px" }} />
+          {errors.title && (
+            <p style={{ color: "red" }}>{errors.title.message}</p>
+          )}
         </FormField>
 
         <FormField label="内容" required>
-          <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            style={{
-              height: "180px",
-              width: "100%",
-            }}
-          />
+          <textarea {...register("content")} />
+          {errors.content && (
+            <p style={{ color: "red" }}>{errors.content.message}</p>
+          )}
         </FormField>
 
         <FormField label="投稿者名" required>
-          <input
-            type="text"
-            value={requester}
-            onChange={(e) => setRequester(e.target.value)}
-            style={{ lineHeight: "24px" }}
-          />
+          <input {...register("requester")} />
+          {errors.requester && (
+            <p style={{ color: "red" }}>{errors.requester.message}</p>
+          )}
         </FormField>
-        <button
-          type="submit"
-          disabled={title.trim() === ""}
-          style={{
-            display: "block",
-            margin: "0 auto",
-            fontSize: "14px",
-            color: "white",
-            backgroundColor: isDisabled ? "gray" : "orange",
-            fontWeight: "bold",
-            padding: "24px",
-            border: "none",
-            opacity: isDisabled ? "0.4" : "1",
-            width: "250px",
-          }}
-        >
-          送信
+        <button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "送信中..." : "登録する"}
         </button>
-        <p style={{ color: "red" }}>{errMsg}</p>
       </form>
     </div>
   );

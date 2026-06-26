@@ -1,14 +1,11 @@
 type Props = {
   sortOrder: "asc" | "desc";
-  setSortOrder: React.Dispatch<React.SetStateAction<"asc" | "desc">>;
+  setSortOrder: (value: "asc" | "desc") => void;
 };
 
 function InquirySort({ sortOrder, setSortOrder }: Props) {
   return (
-    <button
-      onClick={() => setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"))}
-      style={{ marginLeft: "auto" }}
-    >
+    <button onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}>
       {sortOrder === "asc" ? "新しい順" : "古い順"}
     </button>
   );

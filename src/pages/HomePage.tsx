@@ -121,6 +121,7 @@ function HomePage() {
               <InquiryFilter filter={filter} setFilter={handleFilterChange} />
               <InquiryList
                 inquiries={paginatedInquiries}
+                filteredInquiries={filteredInquiries}
                 onSelectInquiry={handleSelectInquiry}
                 onUpdate={updateInquiryStatus}
               />
